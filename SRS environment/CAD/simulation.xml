@@ -1,0 +1,12 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Simulation>
+  <Part Id="7dceabae-741c-4ade-96de-2c00dd9b2bf4">
+    <InitialPosition X="374.8" Y="3.0700000000000056" Z="760.96317129071417" Rx="-180" Ry="3.2506889739463919E-29" Rz="3.8474034314845493E-31" />
+  </Part>
+  <Behavior Id="f5a7b59b-f0b0-463f-bea3-94082296eec2" InitialState="8315f3c8-0cd5-4614-b36b-db7fa79f9cf3">
+    <State Id="82ae0df5-271c-4942-9e25-516e015346db" Name="on" Trigger="Controller1\valve1" TriggerCondition="On" />
+    <State Id="8315f3c8-0cd5-4614-b36b-db7fa79f9cf3" Name="off" Trigger="Controller1\valve1" />
+    <Transition From="82ae0df5-271c-4942-9e25-516e015346db" To="8315f3c8-0cd5-4614-b36b-db7fa79f9cf3" FromToDuration="PT0S" ToFromDuration="PT0S" />
+    <Handler Id="880681c2-5729-405a-b011-fdcdab51343d" GraspStateId="82ae0df5-271c-4942-9e25-516e015346db" />
+  </Behavior>
+</Simulation>

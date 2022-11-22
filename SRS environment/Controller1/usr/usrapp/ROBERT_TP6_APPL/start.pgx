@@ -1,0 +1,35 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Programs xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://www.staubli.com/robotics/VAL3/Program/2">
+  <Program name="start">
+    <Locals>
+      <Local name="l_nIndex" type="num" xsi:type="array" size="1" />
+    </Locals>
+    <Code><![CDATA[begin
+  resetMotion()
+  movej(jStart, tTool, mRapide100)
+  
+  // paramètrage du server tcp 
+  sioCtrl(sData, "port", 8500)
+  sioCtrl(sData, "clients", 1)
+  //CCaractère de fin de line : Line Feed
+  sioCtrl(sData, "endOfString", 13)
+  
+  
+  
+  logMsg("------------ Sio Initialise")
+  
+  //  Créé des taches pour le multi-threading, Prio 50 = neutre
+  while true
+    
+    if !bAcquisitionOk
+      call dataAcquisition()
+    else
+      call goToPoint() 
+    endIf
+    
+  endWhile  
+  
+  waitEndMove()
+end]]></Code>
+  </Program>
+</Programs>

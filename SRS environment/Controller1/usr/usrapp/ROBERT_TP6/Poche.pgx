@@ -1,0 +1,80 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Programs xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://www.staubli.com/robotics/VAL3/Program/2">
+  <Program name="Poche">
+    <Parameters xmlns="http://www.staubli.com/robotics/VAL3/Param/1">
+      <Parameter name="x_pStartPoint" type="pointRx" xsi:type="element" />
+      <Parameter name="x_nDiametreTool" type="num" xsi:type="element" />
+      <Parameter name="x_nPasseAxiale" type="num" xsi:type="element" />
+      <Parameter name="x_nPasseRadiale" type="num" xsi:type="element" />
+      <Parameter name="x_nDimX" type="num" xsi:type="element" />
+      <Parameter name="x_nDimY" type="num" xsi:type="element" />
+      <Parameter name="x_nDimZ" type="num" xsi:type="element" />
+    </Parameters>
+    <Locals>
+      <Local name="l_nIndex" type="num" xsi:type="array" size="1" />
+      <Local name="l_pPoint" type="pointRx" xsi:type="array" size="5" />
+      <Local name="l_nIndex2" type="num" xsi:type="array" size="1" />
+      <Local name="l_nN" type="num" xsi:type="array" size="1" />
+      <Local name="l_nLongueurCote" type="num" xsi:type="array" size="1" />
+      <Local name="l_nIndex3" type="num" xsi:type="array" size="1" />
+      <Local name="l_nM" type="num" xsi:type="array" size="1" />
+      <Local name="l_nProfondeur" type="num" xsi:type="array" size="1" />
+    </Locals>
+    <Code><![CDATA[begin
+  logMsg("Beginning...")
+  
+  l_nProfondeur = x_nDimZ
+  
+  l_nN = roundDown((x_nDimX-x_nDiametreTool-x_nPasseRadiale)/(2*x_nPasseRadiale)+1)
+  l_nM = roundDown(l_nProfondeur/(x_nPasseAxiale))
+  
+  for l_nIndex3 = 1 to l_nM 
+    logMsg("New passe...")
+    if l_nIndex3 == l_nM
+      l_pPoint[0] = appro(x_pStartPoint,{x_nDiametreTool/2,x_nDiametreTool/2,l_nProfondeur,0,0,0})
+    else 
+      l_pPoint[0] = appro(x_pStartPoint,{x_nDiametreTool/2,x_nDiametreTool/2,l_nIndex3 * x_nPasseAxiale,0,0,0})
+    endIf
+    movej(appro(l_pPoint[0],trAppro), tBroche, mRapide100On)
+  
+    movel(l_pPoint[0], tBroche, mUsinage20Off)
+    
+    //------------------------------------- Forme centrale ------------------------------------------------
+    for l_nIndex = 0 to l_nN - 1
+      l_pPoint[1] = compose(l_pPoint[0], fPiece, {l_nIndex*2*x_nPasseRadiale,0,0,0,0,0})
+      l_pPoint[2] = compose(l_pPoint[1], fPiece, {0,x_nDimY - x_nDiametreTool,0,0,0,0})
+      l_pPoint[3] = compose(l_pPoint[2], fPiece, {x_nPasseRadiale,0,0,0,0,0})
+      l_pPoint[4] = compose(l_pPoint[3], fPiece, {0,-(x_nDimY - x_nDiametreTool),0,0,0,0})
+      
+      for l_nIndex2 = 1 to 4
+        movel(l_pPoint[l_nIndex2], tBroche, mUsinage20Off)
+      endFor
+    endFor
+    logMsg("Last 'U'")
+    l_pPoint[1] = compose(l_pPoint[0], fPiece, {(x_nDimX - x_nDiametreTool) -  x_nPasseRadiale,0,0,0,0,0})
+    l_pPoint[2] = compose(l_pPoint[1], fPiece, {0,x_nDimY - x_nDiametreTool,0,0,0,0})
+    l_pPoint[3] = compose(l_pPoint[2], fPiece, {x_nPasseRadiale,0,0,0,0,0})
+    l_pPoint[4] = compose(l_pPoint[3], fPiece, {0,-(x_nDimY - x_nDiametreTool),0,0,0,0})
+    
+    for l_nIndex2 = 1 to 4
+      movel(l_pPoint[l_nIndex2], tBroche, mUsinage20Off)
+    endFor
+   
+    //------------------------------------- Forme contours ------------------------------------------------
+    
+    movel(l_pPoint[0], tBroche, mUsinage20Off)
+    movel(appro(l_pPoint[0],trAppro), tBroche, mUsinage20Off)
+    
+    l_pPoint[1] = compose(l_pPoint[0], fPiece, {0,x_nDimY - x_nDiametreTool,0,0,0,0})
+    l_pPoint[2] = compose(l_pPoint[1], fPiece, {x_nDimX - x_nDiametreTool,0,0,0,0,0})
+    
+    movej(appro(l_pPoint[1], trAppro), tBroche, mRapide100On)
+    movel(l_pPoint[1], tBroche, mUsinage20Off)
+    movel(l_pPoint[2], tBroche, mUsinage20Off)
+    movel(appro(l_pPoint[2], trAppro), tBroche, mUsinage20Off)
+  endFor
+  movej(appro(l_pPoint[0],trAppro), tBroche, mRapide100On)
+  logMsg("Program ended.")
+end]]></Code>
+  </Program>
+</Programs>

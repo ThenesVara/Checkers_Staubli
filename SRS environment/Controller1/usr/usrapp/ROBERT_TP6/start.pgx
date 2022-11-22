@@ -1,0 +1,14 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Programs xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://www.staubli.com/robotics/VAL3/Program/2">
+  <Program name="start">
+    <Code><![CDATA[begin
+  resetMotion()
+  movej(jStart, tBroche, mRapide100On)
+  
+  call Poche(pStartUsinage, nDiametreFraise, 7, 4, 100, 50, 20)
+  
+  movej(jChangeOutil, tBroche, mRapide100On)
+  waitEndMove()
+end]]></Code>
+  </Program>
+</Programs>

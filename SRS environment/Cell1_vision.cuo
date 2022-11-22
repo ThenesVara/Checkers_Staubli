@@ -1,0 +1,63 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<CellUserOptions>
+  <Controller Name="Controller1">
+    <Application>Disk://AA_Chessie/AA_Chessie.pjx</Application>
+  </Controller>
+  <Option Name="DataTreeView">
+    <Nodes>
+      <Node Path="Cell1_vision" IsExpanded="true" />
+      <Node Path="Cell1_vision\Controller1" IsExpanded="true" />
+      <Node Path="Cell1_vision\Controller1\AA_Chessie" IsExpanded="true" />
+      <Node Path="Cell1_vision\Controller1\AA_Chessie\frame" IsExpanded="true" />
+      <Node Path="Cell1_vision\Controller1\AA_Chessie\jointRx" IsExpanded="true" />
+      <Node Path="Cell1_vision\Controller1\AA_Chessie\jointRx\jCaseNoire" IsExpanded="true" />
+      <Node Path="Cell1_vision\Controller1\AA_Chessie\jointRx\jInitial" IsExpanded="true" />
+      <Node Path="Cell1_vision\Controller1\AA_Chessie\mdesc" IsExpanded="true" />
+      <Node Path="Cell1_vision\Controller1\AA_Chessie\mdesc\mDeplacement" IsExpanded="true" />
+      <Node Path="Cell1_vision\Controller1\AA_Chessie\mdesc\mDepose" IsExpanded="true" />
+      <Node Path="Cell1_vision\Controller1\AA_Chessie\num" IsExpanded="true" />
+      <Node Path="Cell1_vision\Controller1\AA_Chessie\pointRx" IsExpanded="true" />
+      <Node Path="Cell1_vision\Controller1\AA_Chessie\pointRx\pCaseNoire" IsExpanded="true" />
+      <Node Path="Cell1_vision\Controller1\AA_Chessie\tool\tTool" IsExpanded="true" />
+      <Node Path="Cell1_vision\Controller1\AA_Chessie\trsf" IsExpanded="true" />
+      <Node Path="Cell1_vision\Controller1\AA_Chessie\trsf\trAppro" IsExpanded="true" />
+    </Nodes>
+  </Option>
+  <Option Name="CellExplorer">
+    <Nodes>
+      <Node Path="Cell1_vision" IsExpanded="true" />
+      <Node Path="Cell1_vision\Controller1" IsExpanded="true" />
+      <Node Path="Cell1_vision\Controller1\AA_Chessie" IsExpanded="true" />
+      <Node Path="Cell1_vision\Controller1\AA_Chessie\CasesNoires" IsExpanded="true" />
+      <Node Path="Cell1_vision\Controller1\AA_Chessie\Deplacementpion\Parameters" IsExpanded="true" />
+    </Nodes>
+  </Option>
+  <Option Name="GeometryView">
+    <Nodes>
+      <Node Path="Cell1_vision" IsExpanded="true" />
+      <Node Path="Cell1_vision\Controller1" IsExpanded="true" />
+      <Node Path="Cell1_vision\Controller1\AA_Chessie" IsExpanded="true" />
+      <Node Path="Cell1_vision\Controller1\AA_Chessie\world[0]\fFrame" IsExpanded="true" />
+    </Nodes>
+  </Option>
+  <Option Name="Breakpoints">
+    <Breakpoints />
+  </Option>
+  <Option Name="IOsControlPanel">
+    <Ios />
+  </Option>
+  <Option Name="Watches">
+    <Watches />
+  </Option>
+  <Option Name="3DView">
+    <_3DView Visible="true" />
+  </Option>
+  <Option Name="SynchronizerMode">
+    <Synchronizers>
+      <Synchronizer Controller="Controller1" Mode="Emulator" />
+    </Synchronizers>
+  </Option>
+  <Option Name="Safety">
+    <Safeties />
+  </Option>
+</CellUserOptions>
