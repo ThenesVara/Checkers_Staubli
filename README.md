@@ -1,7 +1,7 @@
 # Checkers_Staubli
 
 Notre objectif pour ce projet est de faire jouer aux dames un robot de type Stäubli TX-90. Celui-ci pourra permetre aux travers d'une IHM de voir 2 personnes s'affronter
-ou bien une personne en train d'affronter une IA. 
+ou bien une personne affronter une IA. 
 
 Pour ceci, nous allons créer un environnement de simulation sous SRS, une IHM afin que l'utilisateur puisse jouer. Les mouvements effectuées sur l'interface seront envoyés à au controleur du TX-90 grâce à une carte de type Raspberry PI liée au robot via une communication TCP/IP. 
 
