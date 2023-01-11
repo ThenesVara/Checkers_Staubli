@@ -1,19 +1,29 @@
 # Jeu de dames
 
-checkers.py : plateau de jeu, pions, déplacements, visuels etc...
+https://github.com/Hsankesara/Draughts-AI
 
-gamebot.py : IA qui joue aux dames
+## Code
 
-main.py : jeu de dames 
+- checkers.py : plateau de jeu, pions, déplacements, visuels etc...
+
+- gamebot.py : IA qui joue aux dames
+
+- main.py : jeu de dames 
+
 -> mode 0 : Humain VS IA 
+
 -> mode 1 : IA VS IA
 
-main_interface.py : Choix du mode de jeu Humain vs IA ou IA vs IA sur une interface. Puis jeu de dames
+![image](https://user-images.githubusercontent.com/114569016/211798485-7b8e71a6-fe51-4078-a56a-a9ad5bd48845.png)
+
+- main_interface.py : Choix du mode de jeu Humain vs IA ou IA vs IA sur une interface. Puis jeu de dames
+
+![image](https://user-images.githubusercontent.com/114569016/211798756-a9571dd7-5fe7-4110-b4bc-fbbc51d8a897.png)
 
 
-## Modification 
-checkers.py :
-- Modifier le chemin de l'image du plateau de jeu
-(ligne 190) : self.background = pygame.image.load(*CHEMIN_DU_PLATEAU_RESOURCES*)
+## Modification dans le code
 
-exemple : CHEMIN_DU_PLATEAU_RESOURCES : C:/Users/.../Draughts-AI-master/resources/board.png
+- checkers.py :
+Modifier le chemin de l'image du plateau de jeu
+
+(ligne 190) : self.background = pygame.image.load(C:/Users/.../Draughts-AI-master/resources/board.png)
