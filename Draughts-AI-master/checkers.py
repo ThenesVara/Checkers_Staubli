@@ -187,7 +187,7 @@ class Graphics:
 
 		self.window_size = 600
 		self.screen = pygame.display.set_mode((self.window_size, self.window_size))
-		self.background = pygame.image.load("D:/Projet Checker's board/Draughts-AI-master/resources/board.png")
+		self.background = pygame.image.load("C:/Users/thene/OneDrive/Bureau/Projet Robotique 5A/Projet Checker's board/Draughts-AI-master/resources/board.png")
 
 		self.square_size = self.window_size // 8
 		self.piece_size = self.square_size // 2
@@ -276,6 +276,7 @@ class Graphics:
 class Board:
 	def __init__(self):
 		self.matrix = self.new_board()
+		#self.matrix_position = [[0, 1, 0, 1, 0, 1, 0, 1], [1, 0, 1, 0, 1, 0, 1, 0], [0, 1, 0, 1, 0, 1, 0, 1], [0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0], [2, 0, 2, 0, 2, 0, 2, 0], [0, 2, 0, 2, 0, 2, 0, 2] [2, 0, 2, 0, 2, 0, 2, 0]]
 
 	def new_board(self):
 		"""
@@ -509,6 +510,20 @@ class Board:
 				else:
 					print('X', end=" ")
 			print('')
+   
+   
+	'''def repr_matrix_position(self):
+		for j in range(8):
+			for i in range(8):
+				if self.matrix[i][j].occupant is not None:
+					if self.matrix[i][j].occupant.color == BLUE:
+						self.matrix_position[i][j] = 1
+					else:
+						self.matrix_position[i][j] = 2
+				else:
+					self.matrix_position[i][j] = 0
+		print(self.matrix_position)'''
+			
 
 class Piece:
 	def __init__(self, color, king = False):
