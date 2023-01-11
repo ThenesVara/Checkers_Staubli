@@ -1,0 +1,20 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Programs xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://www.staubli.com/robotics/VAL3/Program/2">
+  <Program name="TestPositionCal">
+    <Code><![CDATA[begin
+  call DeplacementInit()
+
+  call Deplacementpion(9,13)
+  call Deplacementpion(22,18)
+
+  call Deplacementpion(13,22)
+  call Pionperdu(18,0)
+
+  call Deplacementpion(26,19)
+  call Pionperdu(22,1)
+
+  call DeplacementInit()
+
+end]]></Code>
+  </Program>
+</Programs>

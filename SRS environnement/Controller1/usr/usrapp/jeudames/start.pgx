@@ -1,0 +1,41 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Programs xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://www.staubli.com/robotics/VAL3/Program/2">
+  <Program name="start">
+    <Code><![CDATA[begin
+  
+
+  // Position des cases
+  //   28   29  30  31             ligne 8 
+  //     ....                      ...
+  //  8   9  10  11                ligne 3
+  //    4   5   6   7              ligne 2 
+  //  0   1   2   3                ligne 1
+  
+  //pCase[0] = case O en bas à gauche du plateau  
+  
+  //variable pour numeroter les cases
+  ni=0
+  
+  for nY=1 to 8
+    for nX=0 to 3
+      
+      //ligne case impair
+      if nY % 2 == 1 
+        pCaseNoire[ni]= compose(pCaseNoire[0], fFrame , {55.6*nX, 27.8*(nY - 1), 0, 0, 0, 0})
+        //pCaseNoire[ni]= pCaseNoire[0] + 55.6*nX + 27.8 * (nY - 1) 
+      
+      //ligne case pair
+      else
+        pCaseNoire[ni]= compose(pCaseNoire[0], fFrame , {27.8*(nX+1), 27.8*(nY - 1), 0, 0, 0, 0})
+        //pCaseNoire[ni]= pCaseNoire[0] + 27.8*(nX+1) + 27.8 * (nY - 1)
+      endIf
+      
+      ni = ni + 1
+        
+    endFor
+  endFor
+end
+
+]]></Code>
+  </Program>
+</Programs>

@@ -1,0 +1,64 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Programs xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://www.staubli.com/robotics/VAL3/Program/2">
+  <Program name="dataAcquisition">
+    <Locals>
+      <Local name="i" type="num" xsi:type="array" size="1" />
+      <Local name="nb" type="num" xsi:type="array" size="1" />
+      <Local name="l_nByteIn" type="num" xsi:type="array" size="32" />
+      <Local name="l_nNumTrsfIn" type="num" xsi:type="array" size="4" />
+    </Locals>
+    <Code><![CDATA[begin
+   logMsg("  dataAcquisition start")
+  do
+    
+    nb=0
+    i=0
+    while(nb<32)
+      nb=sioGet(sData, l_nByteIn[i]) 
+      
+      if(nb>0)   
+        i=i+nb 
+      else
+        // Erreur de communication  	
+        return
+      endIf
+      logMsg("Recuperation du buffer...")
+    endWhile  
+    logMsg("Buffer récupéré.")
+    
+    if(fromBinary(l_nByteIn, 32, "8.0l", l_nNumTrsfIn) != 4)  
+      // Données altérées	
+      logMsg("Données altérées")
+      return
+    else   
+      logMsg("Données reçues")
+      pTarget.trsf.x = l_nNumTrsfIn[0]   
+      pTarget.trsf.y = l_nNumTrsfIn[1]  
+      pTarget.trsf.z = l_nNumTrsfIn[2]  
+      
+      if(l_nNumTrsfIn[3] > 0)
+        bPinceOpen = true
+      else
+        bPinceOpen = false
+      endIf
+      
+      
+      putln(l_nNumTrsfIn[0])
+      logMsg("X : ")
+      logMsg(toString("5.2", l_nNumTrsfIn[0]))
+      
+      putln(l_nNumTrsfIn[1])
+      logMsg("Y : ")
+      logMsg(toString("5.2", l_nNumTrsfIn[1]))
+      
+      putln(l_nNumTrsfIn[2])
+      logMsg("Z : ")
+      logMsg(toString("5.2", l_nNumTrsfIn[2]))
+      
+      bAcquisitionOk = true
+    endIf
+    
+  until bAcquisitionOk
+end]]></Code>
+  </Program>
+</Programs>
