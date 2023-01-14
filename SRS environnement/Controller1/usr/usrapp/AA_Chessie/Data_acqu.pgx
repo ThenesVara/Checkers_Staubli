@@ -1,0 +1,50 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Programs xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://www.staubli.com/robotics/VAL3/Program/2">
+  <Program name="Data_acqu">
+    <Code><![CDATA[begin
+  
+  sioCtrl(sData, "port", 5000)
+  sioCtrl(sData, "clients", 1)
+  //On choisit un caractère de fin de ligne 
+  sioCtrl(sData, "endOfString", 33)
+  logMsg("------------ Sio Initialise")
+  // ---- Programme pour lire une trsf ----
+  nb=0
+  i=0
+
+  while(nb<24)
+    //sioGet renvoie le nombre de caractère lue sur la liaison 
+    //elle convertit en ASCII la valeur reçue et la stock dans nTESTIO dans notre cas
+    nb=sioGet(sData, nTESTSIO[i])
+    sString=toString("",nTESTSIO[i])
+    logMsg("donnee recu")
+    logMsg(sString)
+    delay(0.5)
+    if(nb>0)
+      i=i+nb
+    else
+      // Erreur de communication
+      return
+    endIf
+  endWhile
+  logMsg("fin du train de donnée") 
+  logMsg("début de la conversion")
+  if(fromBinary(nTESTSIO, 24, "8.0l", TEST) != 3)
+    // Données altérées
+    logMsg("données altérées")
+    return
+  else
+    logMsg("conversion réussie")
+    sString=toString("",TEST[0])
+    logMsg(sString)
+    sString=toString("",TEST[1])
+    logMsg(sString)
+    logMsg("deplacement")
+    //call Deplacementpion(1,TEST)
+  endIf
+  
+end
+
+]]></Code>
+  </Program>
+</Programs>
