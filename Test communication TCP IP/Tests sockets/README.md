@@ -5,7 +5,9 @@ L'objectif est d'établir une connexion TCP/IP entre le Stäubli qui est serveur
 
 ## Test:
 
-Socket Client.py : le client se connecte au Serveur (via adresse IP). Lorsqu'il est connecté, il est possible d'envoyer des messages (et d'en recevoir du serveur).
+Socket Client.py : le client se connecte au Serveur (via adresse IP). Lorsqu'il est connecté, il peut envoyer une valeur (et d'en recevoir du serveur).
+
+Socket Client data.py : le client se connecte au Serveur (via adresse IP). Lorsqu'il est connecté, il est possible d'envoyer plusieurs messages/valeurs.
 
 Socket serveur.py : le serveur peut recevoir des messages et en envoyer au client.
 
