@@ -37,6 +37,8 @@ Choix du mode de jeu :
 
 ## Jeu de dames 
 
+Checkers with AI : https://github.com/Hsankesara/Draughts-AI
+
 Jeu selon le mode choisi :
 
 <img src="https://user-images.githubusercontent.com/114569016/214119823-506b189a-ed3a-4d0f-a0f9-e424da921871.png" width=30% height=30%>
