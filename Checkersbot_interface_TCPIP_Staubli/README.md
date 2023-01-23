@@ -22,6 +22,8 @@ Puis jeu de dames (pygame)
 
 ### tests / Interface
 
+tests/Interface/Checkers_Interface_bot : Interface jeu de dames avec la bibliotheque pygame (non finalisée)
+
 bouton_mode_pygame.py : Interface choix mode avec la bibliotheque pygame
 
 bouton_mode_test.py : Interface choix mode avec la bibliotheque PyQt
