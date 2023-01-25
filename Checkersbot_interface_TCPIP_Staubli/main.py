@@ -29,10 +29,11 @@ global mode
 mode = 5
 
 global C
+# dans le code SRS si la valeur 99 est envoyée, cela signifie qu'aucun pion n'est mangé
 p=99
 C = np.array([[p, 28, p, 29, p, 30, p, 31],[24, p,25 , p, 26, p, 27, p],[p, 20, p, 21, p, 22, p, 23],[16, p, 17, p, 18, p, 19, p],[p,12, p, 13, p, 14, p, 15],[8, p, 9, p, 10, p, 11, p],[p, 4, p, 5, p, 6, p, 7],[0, p, 1, p, 2, p, 3, p]])
 
- ###################################   COMMUNICATION TCP/IP - SOCKET   #################################
+ ###################################   FONCTIONS COMMUNICATION TCP/IP - SOCKET   #################################
 ''' Envoi les positions des pions de l'interface à l'adresse IP du staubli'''
 def client_program_init(): 
     global client_socket 
@@ -48,7 +49,7 @@ def client_program(client_socket, pos):
     message2 = pos[1]  # take input
     message3 = pos[2]  # take input
 
-    # si message3 = 0 -> mange rien
+    # si message3 = 99 -> pion mange pas de pion
     packer = struct.Struct("d d d")
         
     #envoi : (valeur choisie, valeur choisie2, valeur choisie3)
@@ -56,6 +57,8 @@ def client_program(client_socket, pos):
     client_socket.sendall(data)
 
     #client_socket.close()  # close the connection
+
+
 
 
 
@@ -149,7 +152,7 @@ def interface(mode):
         else :
             ######################################## CHECKERS BOT #################################
             
-            ''' SOCKET CLIENT POUR COMMUNICATION TCP IP'''
+            ''' INITIALISATION SOCKET CLIENT POUR COMMUNICATION TCP IP'''
             client_socket = client_program_init()
             
             game = checkers.Game(loop_mode=True)
@@ -164,8 +167,44 @@ def interface(mode):
                 
                 if mode == 0:  
                     if game.turn == BLUE:
-                        # TO start player's turn uncomment the below line and comment a couple  of line below than that
-                        # game.player_turn()
+                        # IA
+                        count_nodes = random_bot_blue.step(game.board, True)
+                        game.update() #IA
+                        
+                        if gamebot.envoi_ia == 1:
+                            position4 = C[gamebot.POSITION_PIECE_IA[0],gamebot.POSITION_PIECE_IA[1]] #position depart pion
+                            position5 = C[gamebot.POSITION_PIECE_IA[2],gamebot.POSITION_PIECE_IA[3]] #position arrivé pion
+                            position6 = C[gamebot.POSITION_PIECE_IA[4],gamebot.POSITION_PIECE_IA[5]] #position pion mangé
+                            position_ia = [position4, position5, position6] #position des pions qui ont bougés 
+                            
+                            #TCP IP
+                            client_program(client_socket, position_ia)
+                            
+                            #reinitialise envoi_ia à 0 (pour éviter l'envoi d'infos en continu)
+                            gamebot.envoi_ia = 0     
+
+                    else:
+                        # Player 
+                        game.player_turn() #joueur
+                        if checkers.envoi == 1:
+                        
+                            position1 = C[checkers.POSITION_PIECE[0],checkers.POSITION_PIECE[1]]
+                            position2 = C[checkers.POSITION_PIECE[2],checkers.POSITION_PIECE[3]]
+                            position3 = C[checkers.POSITION_PIECE[4],checkers.POSITION_PIECE[5]] 
+                            position_joueur = [position1, position2, position3] #position des pions qui ont bougés
+                            
+                            #TCP IP
+                            client_program(client_socket, position_joueur) # Uncomment the below line for TCP IP communication 
+                            
+                            #reinitialise envoi à 0 (pour éviter l'envoi d'infos en continu)
+                            checkers.envoi = 0 
+
+                        #count_nodes = bot.step(game.board, True)
+                        #print('Total nodes explored in this step are', count_nodes)
+                    if game.endit:
+                        break
+                if mode == 1:
+                    if game.turn == BLUE:
                         count_nodes = random_bot_blue.step(game.board, True)
                         game.update() #IA
                         
@@ -176,45 +215,22 @@ def interface(mode):
                             position_ia = [position4, position5, position6]
                             client_program(client_socket, position_ia)
                             
-                            #print('IA', position4, position5, position6)
-                            gamebot.envoi_ia = 0     
-
-             
-                        #client_program(client_socket, position)
-                    else:
-                        # TO start player's turn uncomment the below line and comment a couple  of line below than that
-                        #checkers.position_piece()
-                        game.player_turn() #joueur
-                        
-                        if checkers.envoi == 1:
-                            # Uncomment the below line for TCP IP communication 
-
-                            position1 = C[checkers.POSITION_PIECE[0],checkers.POSITION_PIECE[1]]
-                            position2 = C[checkers.POSITION_PIECE[2],checkers.POSITION_PIECE[3]]
-                            position3 = C[checkers.POSITION_PIECE[4],checkers.POSITION_PIECE[5]] 
-                            position_joueur = [position1, position2, position3]
-                            client_program(client_socket, position_joueur)
-                            #print('joueur',position1, position2, position3)
-                            checkers.envoi = 0 
-
-                        #count_nodes = bot.step(game.board, True)
-                        #print('Total nodes explored in this step are', count_nodes)
-                        #game.update()
-                    if game.endit:
-                        break
-                if mode == 1:
-                    if game.turn == BLUE:
-                        count_nodes = random_bot_blue.step(game.board, True)
-                        game.update() #IA
-                        # Uncomment the below line for TCP IP communication 
-                        position =gamebot.position_piece_ia()
-                        client_program(client_socket, position)
+                            gamebot.envoi_ia = 0 
                         
                     else:
                         count_nodes = bot.step(game.board, True)
                         game.update() #IA
-                        position = gamebot.position_piece_ia()
-                        client_program(client_socket, position)
+                        
+                        if gamebot.envoi_ia == 1:
+                            position4 = C[gamebot.POSITION_PIECE_IA[0],gamebot.POSITION_PIECE_IA[1]]
+                            position5 = C[gamebot.POSITION_PIECE_IA[2],gamebot.POSITION_PIECE_IA[3]]
+                            position6 = C[gamebot.POSITION_PIECE_IA[4],gamebot.POSITION_PIECE_IA[5]]
+                            position_ia = [position4, position5, position6]
+                            client_program(client_socket, position_ia)
+                            
+                            #print('IA', position4, position5, position6)
+                            gamebot.envoi_ia = 0 
+
                         
 
                     if game.endit:
