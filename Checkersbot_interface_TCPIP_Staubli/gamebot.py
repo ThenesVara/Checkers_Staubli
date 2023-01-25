@@ -5,6 +5,8 @@ import random
 from copy import deepcopy
 import math
 from time import sleep
+import numpy as np
+
 pygame.font.init()
 
 
@@ -23,6 +25,11 @@ NORTHEAST = "northeast"
 SOUTHWEST = "southwest"
 SOUTHEAST = "southeast"
 
+global POSITION_PIECE_IA
+POSITION_PIECE_IA = np.array([0,0,0,0,0,0])  #POSITION_PIECE = [positiondepartx, positiondeparty, positionfinx, positionfiny, positionmangex, positionmangey]
+
+global envoi_ia
+envoi_ia = 0
 
 class Bot:
     def __init__(self, game, color, method='random', mid_eval=None, end_eval=None, depth=1):
@@ -70,8 +77,11 @@ class Bot:
             return self._count_nodes
 
     def _action(self, current_pos, final_pos, board):
+        global envoi_ia
         if current_pos is None:
             self.game.end_turn()
+
+            
             # board.repr_matrix()
             # print(self._generate_all_possible_moves(board))
         # print(current_pos, final_pos, board.location(current_pos[0], current_pos[1]).occupant)
@@ -80,6 +90,16 @@ class Bot:
                 current_pos = final_pos
 
             elif current_pos != None and final_pos in board.legal_moves(current_pos[0], current_pos[1]):
+                
+                POSITION_PIECE_IA[0]=current_pos[1]
+                POSITION_PIECE_IA[1]=current_pos[0]
+                POSITION_PIECE_IA[2]=final_pos[1]
+                POSITION_PIECE_IA[3]=final_pos[0]
+                POSITION_PIECE_IA[4]=0
+                POSITION_PIECE_IA[5]=0
+
+                #print('current pos IA',current_pos[1],current_pos[0])
+                #print('final pos IA',final_pos[0], final_pos[1])
 
                 board.move_piece(
                     current_pos[0], current_pos[1], final_pos[0], final_pos[1])
@@ -87,6 +107,10 @@ class Bot:
                 if final_pos not in board.adjacent(current_pos[0], current_pos[1]):
                     board.remove_piece(current_pos[0] + (final_pos[0] - current_pos[0]) //
                                        2, current_pos[1] + (final_pos[1] - current_pos[1]) // 2)
+                    #print('remove_piece IA',current_pos[0] + (final_pos[0] - current_pos[0]) // 2, current_pos[1] + (final_pos[1] - current_pos[1]) // 2)
+                    #print('matrice remove_piece IA',C[current_pos[0] + (final_pos[0] - current_pos[0]) // 2, current_pos[1] + (final_pos[1] - current_pos[1]) // 2])
+                    POSITION_PIECE_IA[4]=current_pos[1] + (final_pos[1] - current_pos[1]) // 2
+                    POSITION_PIECE_IA[5]=current_pos[0] + (final_pos[0] - current_pos[0]) // 2
 
                     self.game.hop = True
                     current_pos = final_pos
@@ -96,6 +120,7 @@ class Bot:
                         # print("HOP in Action", current_pos, final_pos)
                         self._action(current_pos, final_pos[0], board)
                     self.game.end_turn()
+                    
 
         if self.game.hop == True:
             if current_pos != None and final_pos in board.legal_moves(current_pos[0], current_pos[1], self.game.hop):
@@ -106,6 +131,8 @@ class Bot:
 
             if board.legal_moves(final_pos[0], final_pos[1], self.game.hop) == []:
                 self.game.end_turn()
+                
+                
             else:
                 current_pos = final_pos
                 final_pos = board.legal_moves(
@@ -113,8 +140,12 @@ class Bot:
                 if final_pos != []:
                     # print("HOP in Action", current_pos, final_pos)
                     self._action(current_pos, final_pos[0], board)
+
+                
                 self.game.end_turn()
+                
         if self.game.hop != True:
+            envoi_ia = 1
             self.game.turn = self.adversary_color
 
     def _action_on_board(self, board, current_pos, final_pos, hop=False):
@@ -137,6 +168,7 @@ class Bot:
                     if final_pos != []:
                         # print("HOP in Action", current_pos, final_pos)
                         self._action_on_board(board, current_pos, final_pos[0],hop=True)
+
         else:
             # print(current_pos, final_pos)
             if current_pos != None and final_pos in board.legal_moves(current_pos[0], current_pos[1], hop):

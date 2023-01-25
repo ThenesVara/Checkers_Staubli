@@ -39,9 +39,8 @@ Everest Witman - May 2014 - Marlboro College - Programming Workshop
 import pygame, sys
 from pygame.locals import *
 from time import sleep
-import socket
-import struct
 import numpy as np
+
 
 pygame.font.init()
 
@@ -63,48 +62,8 @@ SOUTHEAST = "southeast"
 global POSITION_PIECE
 POSITION_PIECE = np.array([0,0,0,0,0,0])  #POSITION_PIECE = [positiondepartx, positiondeparty, positionfinx, positionfiny, positionmangex, positionmangey]
 
-''' Calcul de la position de la piece selon nos criteres -> voir ressources : une case correspond à un numéro'''
-def position_piece():
-    p=99
-    C = np.array([[p, 28, p, 29, p, 30, p, 31],[24, p,25 , p, 26, p, 27, p],[p, 20, p, 21, p, 22, p, 23],[16, p, 17, p, 18, p, 19, p],[p,12, p, 13, p, 14, p, 15],[8, p, 9, p, 10, p, 11, p],[p, 4, p, 5, p, 6, p, 7],[0, p, 1, p, 2, p, 3, p]])
-    
-    #POSITION_PIECE = [positiondepartx, positiondeparty, positionfinx, positionfinx]
-    position1 = C[POSITION_PIECE[0],POSITION_PIECE[1]]
-    position2 = C[POSITION_PIECE[2],POSITION_PIECE[3]]
-    position3 = C[POSITION_PIECE[4],POSITION_PIECE[5]]
-    print(POSITION_PIECE[0],POSITION_PIECE[1], POSITION_PIECE[2],POSITION_PIECE[3], POSITION_PIECE[4],POSITION_PIECE[5])
-    
-    return position1, position2, position3
-
-
-''' Envoi les positions des pions de l'interface à l'adresse IP du staubli'''
-def client_program_init():  
-    host = '172.31.0.1'  ##socket.gethostname()
-    port = 5000  # socket server port number
-
-    client_socket = socket.socket(socket.AF_INET,socket.SOCK_STREAM)  # instantiate
-    client_socket.connect((host, port))  # connect to the server
-    
-    return client_socket
-
-
-def client_program(client_socket):  
-    
-    pos = position_piece()
-    
-    message = pos[0]  # take input
-    message2 = pos[1]  # take input
-    message3 = pos[2]  # take input
-
-    # si message3 = 0 -> mange rien
-    packer = struct.Struct("d d d")
-        
-    #envoi : (valeur choisie, valeur choisie2, valeur choisie3)
-    data = packer.pack(*(float(message), float(message2),float(message3)))
-    client_socket.sendall(data)
-
-    #client_socket.close()  # close the connection
-
+global envoi 
+envoi = 0
 
 class Game:
 	"""
@@ -130,11 +89,15 @@ class Game:
 		The event loop. This is where events are triggered
 		(like a mouse click) and then effect the game state.
 		"""
+		POSITION_PIECE[4]=0
+		POSITION_PIECE[5]=0
+  
+		global envoi
 		mouse_pos = tuple(map(int, pygame.mouse.get_pos()))
 		self.mouse_pos = tuple(map(int, self.graphics.board_coords(mouse_pos[0], mouse_pos[1]))) # what square is the mouse in?
 		if self.selected_piece != None:
 			self.selected_legal_moves = self.board.legal_moves(self.selected_piece[0], self.selected_piece[1], self.hop)
-			#print("selected_legal_moves: ", self.selected_legal_moves)
+
 
 		for event in pygame.event.get():
 
@@ -146,26 +109,41 @@ class Game:
 				if self.hop == False:
 					if self.board.location(self.mouse_pos[0], self.mouse_pos[1]).occupant != None and self.board.location(self.mouse_pos[0], self.mouse_pos[1]).occupant.color == self.turn:
 						self.selected_piece = self.mouse_pos
+						POSITION_PIECE[0]=self.mouse_pos[1]
+						POSITION_PIECE[1]=self.mouse_pos[0]
+						#print('pion choisi player', self.mouse_pos[0], self.mouse_pos[1])
+
 
 					elif self.selected_piece != None and self.mouse_pos in self.board.legal_moves(self.selected_piece[0], self.selected_piece[1]):
-
+						
 						self.board.move_piece(self.selected_piece[0], self.selected_piece[1], self.mouse_pos[0], self.mouse_pos[1])
+						POSITION_PIECE[2]=self.mouse_pos[1]
+						POSITION_PIECE[3]=self.mouse_pos[0]				
+						#print('mousepos player', self.mouse_pos[0], self.mouse_pos[1])
 
 						if self.mouse_pos not in self.board.adjacent(self.selected_piece[0], self.selected_piece[1]):
 							self.board.remove_piece(self.selected_piece[0] + (self.mouse_pos[0] - self.selected_piece[0]) // 2, self.selected_piece[1] + (self.mouse_pos[1] - self.selected_piece[1]) // 2)
-
+							POSITION_PIECE[4]=self.selected_piece[1] + (self.mouse_pos[1] - self.selected_piece[1]) // 2
+							POSITION_PIECE[5]=self.selected_piece[0] + (self.mouse_pos[0] - self.selected_piece[0]) // 2
+							#print('remove player', self.selected_piece[0] + (self.mouse_pos[0] - self.selected_piece[0]) // 2, self.selected_piece[1] + (self.mouse_pos[1] - self.selected_piece[1]) // 2)
+							#print('matrice remove player', C[self.selected_piece[0] + (self.mouse_pos[0] - self.selected_piece[0]) // 2, self.selected_piece[1] + (self.mouse_pos[1] - self.selected_piece[1]) // 2])
 							self.hop = True
 							self.selected_piece = self.mouse_pos
 						else:
-							self.end_turn()
+							self.end_turn() 
+							envoi = 1
 
 				if self.hop == True:
 					if self.selected_piece != None and self.mouse_pos in self.board.legal_moves(self.selected_piece[0], self.selected_piece[1], self.hop):
 						self.board.move_piece(self.selected_piece[0], self.selected_piece[1], self.mouse_pos[0], self.mouse_pos[1])
 						self.board.remove_piece(self.selected_piece[0] + (self.mouse_pos[0] - self.selected_piece[0]) // 2, self.selected_piece[1] + (self.mouse_pos[1] - self.selected_piece[1]) // 2)
-
+						envoi = 1
+						POSITION_PIECE[4]=self.selected_piece[1] + (self.mouse_pos[1] - self.selected_piece[1]) // 2
+						POSITION_PIECE[5]=self.selected_piece[0] + (self.mouse_pos[0] - self.selected_piece[0]) // 2
+      
 					if self.board.legal_moves(self.mouse_pos[0], self.mouse_pos[1], self.hop) == []:
 							self.end_turn()
+							envoi = 1
 
 					else:
 						self.selected_piece = self.mouse_pos
@@ -195,6 +173,7 @@ class Game:
 		"""
 		if self.turn == BLUE:
 			self.turn = RED
+
 		else:
 			self.turn = BLUE
 
@@ -256,6 +235,7 @@ class Graphics:
 		"""
 		self.screen.blit(self.background, (0,0))
 		self.highlight_squares(legal_moves, selected_piece)
+		
 		self.draw_board_pieces(board)
 
 		if self.message:
