@@ -15,20 +15,37 @@
 
   //Deplacementpion(X,Y) -> deplacement du pion de X vers Y
   //  call Deplacementpion(0,4)
+  //  call Deplacementpion(4,5)
+  //  call Deplacementpion(5,6)
+  //  call Deplacementpion(6,7)
+  //  call Deplacementpion(7,8)
+  //  call Deplacementpion(8,31)
 
   //call TestPositionCal()
+
+  sioCtrl(sData, "port", 5000)
+  sioCtrl(sData, "clients", 1)
+  //On choisit un caractère de fin de ligne 
+  sioCtrl(sData, "endOfString", 33)
+  logMsg("------------ Sio Initialise")
+  sioGet(sData,nTESTSIO)
+  logMsg("fin du train de donnée")
+  putln(nTESTSIO)
+  popUpMsg("fin du train de donnée")
+  while true
+    ncompteur=sioGet(sData,nTESTSIO)
+    delay(0)
+  endWhile
   
-  call DeplacementInit()
-  call Data_acqu()
-  
-  if TEST[2]==0
-    call Deplacementpion(TEST[0],TEST[1])
-  
-  else 
-    call Deplacementpion(TEST[0],TEST[1])
-    call Pionperdu(TEST[2],Compteur_perdu)
-    Compteur_perdu=Compteur_perdu+1
-  endIf
+  //if nTESTSIO == -1
+
+    //   logMsg("failed connection to server")
+
+    // else
+
+    //  logMsg("connection succesfull")
+    // call TestPositionCal()
+    // endIf 
 end]]></Code>
   </Program>
 </Programs>
