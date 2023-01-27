@@ -5,6 +5,9 @@ ou bien une personne affronter une IA.
 
 Pour ceci, nous allons créer un environnement de simulation sous SRS, une IHM afin que l'utilisateur puisse jouer. Les mouvements effectuées sur l'interface seront envoyés à au controleur du TX-90 grâce à une carte de type Raspberry PI liée au robot via une communication TCP/IP. 
 
+## Vidéo finale projet
+
+https://github.com/ThenesVara/Checkers_Staubli/blob/41114a53729311243c137051d99cb43367599fa8/Checkersbot_interface_TCPIP_Staubli/resources/checkersbot%20final.gif
 
 # SRS environment 
 
