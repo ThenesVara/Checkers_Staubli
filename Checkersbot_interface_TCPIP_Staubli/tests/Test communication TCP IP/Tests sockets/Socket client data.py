@@ -14,23 +14,26 @@ def client_program():
     client_socket.connect((host, port))  # connect to the server
         
     message = input(" -> ")  # take input
+    message2 = input(" -> ")  # take input
+    message3 = input(" -> ")  # take input
+
 
     while message.lower().strip() != 'bye':
         # 3 valeurs envoyés
         packer = struct.Struct("d d d")
         
-        #envoi : (valeur choisie, 16, 12)
-        data = packer.pack(*(float(message), float(16),float(12)))
+        data = packer.pack(*(float(message), float(message2),float(message3)))
         client_socket.sendall(data)
 
         message = input(" -> ")  # again take input
+        message2 = input(" -> ")  # take input
+        message3 = input(" -> ")  # take input
 
     client_socket.close()  # close the connection
 
 
 if __name__ == '__main__':
     client_program()
-    
     
     
     
